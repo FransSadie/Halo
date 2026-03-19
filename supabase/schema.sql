@@ -1,5 +1,5 @@
 create table if not exists public.profiles (
-  id uuid primary key,
+  id uuid primary key references auth.users(id) on delete cascade,
   first_name text not null,
   last_name text,
   phone text,
@@ -26,6 +26,7 @@ create table if not exists public.verification_requests (
   source_label text not null,
   content text not null,
   screenshot_name text,
+  extracted_text text,
   created_at timestamptz not null default now()
 );
 
@@ -35,7 +36,10 @@ create table if not exists public.verification_results (
   score integer not null,
   explanation text not null,
   suggested_action text not null,
-  reasons jsonb not null default '[]'::jsonb
+  reasons jsonb not null default '[]'::jsonb,
+  pause_checklist jsonb not null default '[]'::jsonb,
+  requires_review boolean not null default false,
+  trusted_match_name text
 );
 
 create table if not exists public.safety_reminders (
@@ -44,4 +48,13 @@ create table if not exists public.safety_reminders (
   title text not null,
   message text not null,
   cadence text not null
+);
+
+create table if not exists public.app_settings (
+  profile_id uuid primary key references public.profiles(id) on delete cascade,
+  text_scale text not null default 'standard',
+  high_contrast boolean not null default false,
+  simplified_mode boolean not null default false,
+  read_aloud boolean not null default false,
+  theme text not null default 'light'
 );

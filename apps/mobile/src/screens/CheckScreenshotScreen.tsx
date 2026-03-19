@@ -5,19 +5,53 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { TextArea, TextInput } from "@/components/Input";
 import { ScreenShell } from "@/components/ScreenShell";
 import { useSafetyApp } from "@/hooks/useSafetyApp";
+import { ocrService } from "@/services/ocrService";
 
 export const CheckScreenshotScreen = () => {
   const navigate = useNavigate();
   const { evaluateInput, scenarios } = useSafetyApp();
   const [fileName, setFileName] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [ocrText, setOcrText] = useState("");
+  const [ocrStatus, setOcrStatus] = useState("No OCR has been run yet.");
+  const [reading, setReading] = useState(false);
 
-  const submit = () => {
-    if (!description.trim()) {
+  const runOcr = async () => {
+    if (!selectedFile) {
+      setOcrStatus("Choose a screenshot first.");
       return;
     }
 
-    evaluateInput("screenshot", fileName || "Uploaded screenshot", description, fileName || undefined);
+    setReading(true);
+    setOcrStatus("Reading the screenshot...");
+
+    try {
+      const text = await ocrService.extractText(selectedFile);
+      setOcrText(text);
+      if (!description.trim() && text) {
+        setDescription(text);
+      }
+      setOcrStatus(text ? "We found text in the screenshot." : "No clear text was found in the screenshot.");
+    } catch {
+      setOcrStatus("The screenshot could not be read automatically.");
+    } finally {
+      setReading(false);
+    }
+  };
+
+  const submit = async () => {
+    if (!description.trim() && !ocrText.trim()) {
+      return;
+    }
+
+    await evaluateInput(
+      "screenshot",
+      fileName || "Uploaded screenshot",
+      description || "Screenshot submitted for review",
+      fileName || undefined,
+      ocrText || undefined,
+    );
     navigate("/result");
   };
 
@@ -32,15 +66,31 @@ export const CheckScreenshotScreen = () => {
           <TextInput
             type="file"
             accept="image/*"
-            onChange={(event) => setFileName(event.target.files?.[0]?.name ?? "")}
+            onChange={(event) => {
+              const file = event.target.files?.[0] ?? null;
+              setSelectedFile(file);
+              setFileName(file?.name ?? "");
+              setOcrText("");
+              setOcrStatus(file ? "Ready to read the screenshot." : "No OCR has been run yet.");
+            }}
             className="file:mr-4 file:rounded-full file:bg-secondary file:px-4 file:py-2"
           />
+          <Button size="lg" variant="secondary" onClick={runOcr} disabled={!selectedFile || reading}>
+            {reading ? "Reading screenshot..." : "Read words from screenshot"}
+          </Button>
+          <p className="text-[1rem] leading-7 text-muted-foreground">{ocrStatus}</p>
+          {ocrText ? (
+            <div className="rounded-[24px] bg-muted px-4 py-4">
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-muted-foreground">Extracted text</p>
+              <p className="mt-3 text-[1rem] leading-7">{ocrText}</p>
+            </div>
+          ) : null}
           <TextArea
             placeholder="Describe the screenshot. For example: It says I won a prize and asks me to buy a gift card."
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
-          <Button size="lg" onClick={submit} disabled={!description.trim()}>
+          <Button size="lg" onClick={submit} disabled={!description.trim() && !ocrText.trim()}>
             Check this screenshot
           </Button>
         </CardContent>
@@ -61,7 +111,10 @@ export const CheckScreenshotScreen = () => {
                 variant="outline"
                 onClick={() => {
                   setFileName("demo-prize-message.png");
+                  setSelectedFile(null);
                   setDescription(scenario.content);
+                  setOcrText("Congratulations. You won a prize. Buy a gift card today to release your reward.");
+                  setOcrStatus("Demo OCR text loaded.");
                 }}
               >
                 {scenario.title}

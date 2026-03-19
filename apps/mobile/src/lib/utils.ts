@@ -11,14 +11,14 @@ export const formatDateTime = (value: string) =>
 
 export const riskTone = (risk: "likely_safe" | "suspicious" | "high_risk") => {
   if (risk === "high_risk") {
-    return "border-red-200 bg-red-50 text-red-900";
+    return "border-red-400/40 bg-red-500/10 text-foreground";
   }
 
   if (risk === "suspicious") {
-    return "border-amber-200 bg-amber-50 text-amber-900";
+    return "border-amber-400/40 bg-amber-500/10 text-foreground";
   }
 
-  return "border-emerald-200 bg-emerald-50 text-emerald-900";
+  return "border-emerald-400/40 bg-emerald-500/10 text-foreground";
 };
 
 export const riskLabel = (risk: "likely_safe" | "suspicious" | "high_risk") => {

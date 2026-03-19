@@ -5,10 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScreenShell } from "@/components/ScreenShell";
 import { Badge } from "@/components/ui/badge";
 import { useSafetyApp } from "@/hooks/useSafetyApp";
+import { shareService } from "@/services/shareService";
 
 export const TrustedContactsScreen = () => {
   const { trustedContacts, latestVerification } = useSafetyApp();
   const [sharedWith, setSharedWith] = useState<string | null>(null);
+  const [shareStatus, setShareStatus] = useState<string>("Choose a contact to prepare a calm summary and next steps.");
 
   return (
     <ScreenShell title="Trusted contacts" subtitle="These are the people you can reach before you act.">
@@ -44,7 +46,17 @@ export const TrustedContactsScreen = () => {
             <Button
               variant="outline"
               className="justify-start"
-              onClick={() => setSharedWith(contact.name)}
+              onClick={async () => {
+                const response = await shareService.shareToTrustedContact(contact, latestVerification);
+                setSharedWith(contact.name);
+                setShareStatus(
+                  response.mode === "native"
+                    ? `Shared securely with ${contact.name}.`
+                    : response.mode === "clipboard"
+                      ? `Copied a share summary for ${contact.name}.`
+                      : `Opened a message draft for ${contact.name}.`,
+                );
+              }}
             >
               <Share2 className="h-5 w-5" />
               Share this suspicious item
@@ -59,12 +71,12 @@ export const TrustedContactsScreen = () => {
           <CardDescription className="text-[1.1rem] leading-8 text-primary-foreground/90">
             {sharedWith
               ? `Prepared a share summary for ${sharedWith}${latestVerification ? ` about "${latestVerification.request.sourceLabel}"` : ""}.`
-              : "Choose a contact to prepare a calm summary and next steps."}
+              : shareStatus}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-[1rem] leading-7 text-primary-foreground/80">
-            Native share sheets and caregiver alerts can connect here later without changing the rest of the app.
+            {shareStatus}
           </p>
         </CardContent>
       </Card>

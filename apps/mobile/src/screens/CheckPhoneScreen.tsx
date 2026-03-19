@@ -11,13 +11,13 @@ export const CheckPhoneScreen = () => {
   const { evaluateInput, scenarios, trustedContacts } = useSafetyApp();
   const [phone, setPhone] = useState("");
 
-  const submit = () => {
+  const submit = async () => {
     if (!phone.trim()) {
       return;
     }
 
     const knownContact = trustedContacts.find((contact) => contact.phone === phone.trim());
-    evaluateInput("phone", knownContact ? `${knownContact.name} phone number` : "Unknown phone number", phone);
+    await evaluateInput("phone", knownContact ? `${knownContact.name} phone number` : "Unknown phone number", phone);
     navigate("/result");
   };
 

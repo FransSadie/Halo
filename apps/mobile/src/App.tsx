@@ -7,6 +7,7 @@ import { CheckScreenshotScreen } from "@/screens/CheckScreenshotScreen";
 import { CheckTextScreen } from "@/screens/CheckTextScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ResultScreen } from "@/screens/ResultScreen";
+import { SignInScreen } from "@/screens/SignInScreen";
 import { SettingsScreen } from "@/screens/SettingsScreen";
 import { TrustedContactsScreen } from "@/screens/TrustedContactsScreen";
 import { TrustedContactsSetupScreen } from "@/screens/TrustedContactsSetupScreen";
@@ -21,6 +22,7 @@ const AppRoutes = () => {
       <Route path="/welcome" element={<WelcomeScreen />} />
       <Route path="/onboarding/contacts" element={<TrustedContactsSetupScreen />} />
       <Route path="/home" element={<HomeScreen />} />
+      <Route path="/signin" element={<SignInScreen />} />
       <Route path="/check/text" element={<CheckTextScreen />} />
       <Route path="/check/phone" element={<CheckPhoneScreen />} />
       <Route path="/check/screenshot" element={<CheckScreenshotScreen />} />

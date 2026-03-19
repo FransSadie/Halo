@@ -9,14 +9,33 @@ import { useSafetyApp } from "@/hooks/useSafetyApp";
 
 export const HomeScreen = () => {
   const navigate = useNavigate();
-  const { user, reminders, activity } = useSafetyApp();
+  const { user, reminders, activity, authStatus, authMode, accessibility } = useSafetyApp();
   const summary = useRiskSummary(activity);
+  const subtitle = accessibility.simplifiedMode
+    ? "If something feels strange, check it here before you do anything."
+    : "Take a breath. If something feels rushed or strange, check it here before you act.";
 
   return (
     <ScreenShell
       title={`Hello, ${user.firstName}`}
-      subtitle="Take a breath. If something feels rushed or strange, check it here before you act."
+      subtitle={subtitle}
     >
+      {authStatus !== "signed_in" ? (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle>Sync across devices</CardTitle>
+            <CardDescription className="text-[1.1rem]">
+              You are using {authMode === "demo" ? "demo mode" : "a local session"}. Sign in if you want cloud backup for contacts and checks.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button size="lg" variant="outline" onClick={() => navigate("/signin")}>
+              Sign in safely
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
+
       <div className="grid gap-4">
         <Button className="justify-start" size="lg" onClick={() => navigate("/check/text")}>
           <MessageSquareText className="h-7 w-7 shrink-0" />

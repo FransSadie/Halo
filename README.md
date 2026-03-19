@@ -9,6 +9,9 @@ Senior Scam Safety is a mobile-first React and TypeScript MVP for older adults w
 - `supabase/schema.sql` and `supabase/seed.sql`: starter database model and sample records.
 - Local-first storage with optional Supabase configuration.
 - Senior-friendly screens for onboarding, home, verification, result review, trusted contacts, activity log, and settings.
+- Optional Supabase magic-link sign-in and cloud sync.
+- OCR-assisted screenshot reading.
+- Accessibility settings for larger text, high contrast, simplified wording, and read-aloud support.
 
 ## Quick start
 
@@ -58,11 +61,13 @@ If these values are not supplied, the app runs in local demo mode using browser 
 ### Product flow
 
 1. Welcome and plain-language onboarding.
-2. Add one to three trusted contacts.
-3. Use the home screen to check a message, number, or screenshot.
-4. Get a calm risk result with explanation and next action.
-5. Share or call a trusted person.
-6. Review recent activity in a readable log.
+2. Optional magic-link sign-in for syncing through Supabase.
+3. Add one to three trusted contacts.
+4. Use the home screen to check a message, number, or screenshot.
+5. Extract text from screenshots with OCR when needed.
+6. Get a calm risk result with explanation, review checklist, and next action.
+7. Share or call a trusted person.
+8. Review recent activity in a readable log.
 
 ### Scam evaluator
 
@@ -83,6 +88,8 @@ Each check returns:
 - `reasons`
 - `explanation`
 - `suggestedAction`
+- `pauseChecklist`
+- `requiresReview`
 
 ## Demo scenarios
 
@@ -100,14 +107,16 @@ The current scaffold is local-first and production-oriented:
 
 - schema and seed SQL are included
 - the mobile app detects whether Supabase env values exist
-- repository methods are separated so real persistence can replace mock persistence cleanly
+- email magic-link auth is wired in
+- trusted contacts, accessibility settings, and verification history can sync through repository methods
+- repository methods are separated so real persistence can evolve without changing the screen layer
 
 Recommended next backend steps:
 
-1. Add Supabase auth with a caregiver invitation flow.
-2. Persist verification requests/results and trusted contacts.
-3. Add Row Level Security policies per user profile.
-4. Move caregiver alert orchestration into a small Node service only if server-side delivery logic becomes necessary.
+1. Add Row Level Security policies per user profile.
+2. Add caregiver invitation and approval flows.
+3. Move caregiver alert orchestration into a small Node service only if server-side delivery logic becomes necessary.
+4. Add OCR result storage and moderation limits if usage grows.
 
 ## Capacitor and future native extensions
 
@@ -123,7 +132,7 @@ Future roadmap:
 2. Android SMS classification hooks for suspicious message intake.
 3. iOS Call Directory and message filtering extensions through native modules.
 4. Secure caregiver alert delivery and acknowledgement workflow.
-5. OCR pipeline for screenshot text extraction before evaluation.
+5. Richer OCR pipeline with image preprocessing and multilingual support.
 
 ## Notes for extension
 

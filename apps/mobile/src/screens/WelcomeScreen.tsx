@@ -4,9 +4,12 @@ import { Button } from "@/components/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/Card";
 import { ScreenShell } from "@/components/ScreenShell";
 import { Badge } from "@/components/ui/badge";
+import { useSafetyApp } from "@/hooks/useSafetyApp";
+import { hasSupabaseConfig } from "@/services/supabaseClient";
 
 export const WelcomeScreen = () => {
   const navigate = useNavigate();
+  const { authStatus } = useSafetyApp();
 
   return (
     <ScreenShell
@@ -28,7 +31,7 @@ export const WelcomeScreen = () => {
             { icon: Waypoints, title: "Get one clear next step", body: "The app suggests what to do next without technical jargon." },
           ].map((item) => (
             <div key={item.title} className="flex items-start gap-4 rounded-[28px] bg-muted p-5">
-              <div className="rounded-full bg-white p-3 shadow-soft">
+              <div className="rounded-full bg-card p-3 shadow-soft">
                 <item.icon className="h-6 w-6 text-primary" />
               </div>
               <div className="space-y-2">
@@ -50,6 +53,11 @@ export const WelcomeScreen = () => {
       </Card>
 
       <Button size="lg" onClick={() => navigate("/onboarding/contacts")}>Set up trusted contacts</Button>
+      {hasSupabaseConfig && authStatus !== "signed_in" ? (
+        <Button size="lg" variant="outline" onClick={() => navigate("/signin")}>
+          Sign in to sync this app
+        </Button>
+      ) : null}
     </ScreenShell>
   );
 };

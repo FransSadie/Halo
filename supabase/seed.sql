@@ -13,3 +13,7 @@ values
   ('7c087bcf-ea54-46d2-81c9-a83e997592f4', '0d19c7c4-6363-4eb5-8c8f-3ce54a2eac5b', 'Slow down', 'Banks never ask for your OTP by text, call, or email.', 'daily'),
   ('62c2a607-77b0-43df-ae8a-db07ca0d5e52', '0d19c7c4-6363-4eb5-8c8f-3ce54a2eac5b', 'Check first', 'If a caller wants money or gift cards, hang up and check with family first.', 'weekly')
 on conflict (id) do nothing;
+
+insert into public.app_settings (profile_id, text_scale, high_contrast, simplified_mode, read_aloud, theme)
+values ('0d19c7c4-6363-4eb5-8c8f-3ce54a2eac5b', 'standard', false, false, false, 'light')
+on conflict (profile_id) do nothing;

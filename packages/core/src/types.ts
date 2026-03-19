@@ -11,6 +11,14 @@ export interface User {
   createdAt: string;
 }
 
+export interface AccessibilitySettings {
+  textScale: "standard" | "large" | "extra_large";
+  highContrast: boolean;
+  simplifiedMode: boolean;
+  readAloud: boolean;
+  theme: "light" | "dark";
+}
+
 export interface TrustedContact {
   id: string;
   name: string;
@@ -28,6 +36,7 @@ export interface VerificationRequest {
   sourceLabel: string;
   content: string;
   screenshotName?: string;
+  extractedText?: string;
 }
 
 export interface VerificationResult {
@@ -36,6 +45,9 @@ export interface VerificationResult {
   reasons: string[];
   explanation: string;
   suggestedAction: string;
+  pauseChecklist: string[];
+  requiresReview: boolean;
+  trustedMatchName?: string;
 }
 
 export interface ActivityEntry {
@@ -68,4 +80,5 @@ export interface AppSeed {
   activity: ActivityEntry[];
   reminders: SafetyReminder[];
   scenarios: VerificationScenario[];
+  accessibility: AccessibilitySettings;
 }

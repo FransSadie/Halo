@@ -36,6 +36,36 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --app-scale: 1;
+}
+
+:root[data-theme="dark"] {
+  --background: 215 28% 10%;
+  --foreground: 45 50% 96%;
+  --card: 214 24% 14%;
+  --card-foreground: 45 50% 96%;
+  --primary: 192 62% 72%;
+  --primary-foreground: 210 45% 10%;
+  --secondary: 146 26% 22%;
+  --secondary-foreground: 145 36% 92%;
+  --accent: 213 30% 19%;
+  --accent-foreground: 45 50% 96%;
+  --muted: 215 22% 17%;
+  --muted-foreground: 210 16% 75%;
+  --border: 214 20% 26%;
+  --input: 214 20% 26%;
+  --ring: 192 62% 72%;
+  --danger: 0 70% 58%;
+  --danger-foreground: 0 0% 100%;
+  --warning: 42 95% 63%;
+  --warning-foreground: 30 80% 12%;
+  --success: 145 55% 56%;
+  --success-foreground: 145 25% 10%;
+  color: hsl(var(--foreground));
+  background:
+    radial-gradient(circle at top left, rgba(52, 120, 108, 0.32), transparent 30%),
+    radial-gradient(circle at top right, rgba(71, 112, 155, 0.28), transparent 32%),
+    linear-gradient(180deg, #111821 0%, #151d27 44%, #0f1620 100%);
 }
 
 * {
@@ -48,6 +78,7 @@ body {
   min-height: 100vh;
   color: hsl(var(--foreground));
   background: transparent;
+  font-size: calc(16px * var(--app-scale));
 }
 
 a {
@@ -74,4 +105,46 @@ select {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+:root[data-text-scale="large"] {
+  --app-scale: 1.08;
+}
+
+:root[data-text-scale="extra_large"] {
+  --app-scale: 1.16;
+}
+
+:root[data-high-contrast="true"] {
+  --background: 0 0% 100%;
+  --foreground: 210 45% 8%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 45% 8%;
+  --primary: 210 80% 20%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 60 100% 86%;
+  --secondary-foreground: 210 45% 8%;
+  --accent: 190 100% 90%;
+  --accent-foreground: 210 45% 8%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 210 20% 25%;
+  --border: 210 30% 70%;
+  --input: 210 30% 70%;
+}
+
+:root[data-theme="dark"][data-high-contrast="true"] {
+  --background: 0 0% 5%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 9%;
+  --card-foreground: 0 0% 100%;
+  --primary: 188 100% 72%;
+  --primary-foreground: 0 0% 5%;
+  --secondary: 54 100% 62%;
+  --secondary-foreground: 0 0% 5%;
+  --accent: 220 20% 18%;
+  --accent-foreground: 0 0% 100%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 85%;
+  --border: 0 0% 45%;
+  --input: 0 0% 45%;
 }

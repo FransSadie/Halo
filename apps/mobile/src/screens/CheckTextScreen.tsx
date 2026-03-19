@@ -8,20 +8,23 @@ import { useSafetyApp } from "@/hooks/useSafetyApp";
 
 export const CheckTextScreen = () => {
   const navigate = useNavigate();
-  const { evaluateInput, scenarios } = useSafetyApp();
+  const { evaluateInput, scenarios, accessibility } = useSafetyApp();
   const [message, setMessage] = useState("");
 
-  const submit = () => {
+  const submit = async () => {
     if (!message.trim()) {
       return;
     }
 
-    evaluateInput("text", "Suspicious message", message);
+    await evaluateInput("text", "Suspicious message", message);
     navigate("/result");
   };
 
   return (
-    <ScreenShell title="Check a message" subtitle="Paste the message here. Do not click links while you decide.">
+    <ScreenShell
+      title="Check a message"
+      subtitle={accessibility.simplifiedMode ? "Paste the words here. Do not reply yet." : "Paste the message here. Do not click links while you decide."}
+    >
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Step 1</CardTitle>

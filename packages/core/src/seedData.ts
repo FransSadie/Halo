@@ -75,6 +75,13 @@ export const demoSeed: AppSeed = {
       cadence: "weekly",
     },
   ],
+  accessibility: {
+    textScale: "standard",
+    highContrast: false,
+    simplifiedMode: false,
+    readAloud: false,
+    theme: "light",
+  },
   scenarios: [
     {
       id: "scenario-1",
