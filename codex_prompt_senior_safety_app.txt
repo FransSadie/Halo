@@ -1,0 +1,124 @@
+Build the first production-ready MVP for a mobile-first “Senior Scam Safety” application.
+
+Product objective
+Create a cross-platform app for older adults that helps them avoid scams and unwanted digital interactions by making it easy to pause, verify suspicious content, and contact trusted people before taking risky actions.
+
+Primary users
+1. Older adults who need a very simple, low-stress interface.
+2. Optional caregivers or family members who can be configured as trusted contacts.
+
+Core product principles
+- Extremely simple UX: large tap targets, minimal text per screen, high contrast, plain language.
+- The app should not claim to block all scams.
+- The app should act as a safety companion that helps users pause, verify, and escalate.
+- The first version should be web-led but packaged as a mobile app.
+
+Technical direction
+- Frontend: React + TypeScript.
+- Styling: Tailwind CSS.
+- Mobile wrapper: Capacitor.
+- Backend: Supabase for auth, Postgres, and storage.
+- Add a lightweight Node.js service only if needed for server-side scam classification or caregiver alert orchestration.
+- Organize the codebase so future native extensions can be added later for Android call screening and iOS call/message filtering.
+
+Deliverables
+Create a monorepo or well-structured project with:
+- apps/mobile or equivalent React app intended to run inside Capacitor.
+- a clear environment setup.
+- reusable UI components optimized for seniors.
+- a small but realistic domain model.
+- mocked or real Supabase integration, depending on what can be scaffolded cleanly.
+- seed data and a basic demo flow.
+
+MVP feature set
+1. Onboarding
+- Very simple welcome flow.
+- Explain in plain language what the app does.
+- Let the user add 1 to 3 trusted contacts.
+- Store trusted contact information.
+
+2. Home screen
+- Large primary actions:
+  - Check a message
+  - Check a phone number
+  - Check a screenshot
+  - Contact a trusted person
+- Add a small safety reminder area.
+
+3. Verify flow
+- A text input flow where the user can paste or type suspicious text.
+- A phone-number verification flow.
+- A screenshot upload flow.
+- Return a simple result state such as:
+  - Likely safe
+  - Suspicious
+  - High risk
+- Always include a short plain-language explanation and a suggested next action.
+
+4. Trusted contact flow
+- View trusted contacts.
+- One-tap call/message action placeholders.
+- “Share this suspicious item” workflow.
+
+5. Activity log
+- Show recent checks with timestamp, item type, and outcome.
+- Make the log readable and calm, not technical.
+
+6. Notifications
+- Scaffold a notification service abstraction for local/push reminders.
+- Include a few example reminders such as “Banks never ask for your OTP.”
+
+Architecture expectations
+- Use TypeScript throughout.
+- Keep business logic separated from UI.
+- Create a scam-evaluation module with a rules-first approach.
+- Add simple heuristics for scam detection, for example:
+  - urgency language
+  - secrecy language
+  - OTP or password requests
+  - gift card or crypto requests
+  - remote access requests
+- Make the evaluator return both a risk level and reason list.
+
+Suggested domain model
+- User
+- TrustedContact
+- VerificationRequest
+- VerificationResult
+- ActivityEntry
+- SafetyReminder
+
+Screens to build
+- Welcome
+- Add trusted contacts
+- Home dashboard
+- Check text/message
+- Check phone number
+- Check screenshot
+- Result screen
+- Trusted contacts screen
+- Activity log screen
+- Settings screen
+
+Design requirements
+- Very large buttons and touch targets.
+- Clear spacing and visual hierarchy.
+- No cluttered dashboards.
+- Senior-friendly copy.
+- Accessible color contrast.
+- Reusable card/button/layout components.
+
+Implementation notes
+- Stub external integrations where necessary.
+- It is acceptable to mock camera/upload or contact actions for now, but structure the code so they can be replaced later.
+- Add clear README instructions for local development.
+- Include comments where future platform-specific native extensions would attach.
+
+Output requirements
+- Generate the codebase.
+- Include a README with setup, architecture, and next steps.
+- Include sample data and demo scenarios.
+- Include a brief roadmap section for future native call/SMS protection features.
+
+Quality bar
+The result should feel like a serious MVP scaffold that can be run, inspected, and extended immediately, not a toy demo.

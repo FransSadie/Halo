@@ -1,0 +1,15 @@
+{
+  "name": "senior-scam-safety",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @senior-scam-safety/mobile",
+    "build": "npm run build --workspace @senior-scam-safety/core && npm run build --workspace @senior-scam-safety/mobile",
+    "lint": "npm run lint --workspace @senior-scam-safety/mobile",
+    "typecheck": "npm run typecheck --workspace @senior-scam-safety/core && npm run typecheck --workspace @senior-scam-safety/mobile"
+  }
+}
